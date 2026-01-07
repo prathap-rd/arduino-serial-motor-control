@@ -28,6 +28,7 @@ with direction and speed control via Arduino and L298N.
 - L → Left
 - R → Right
 - S → Stop
+- 0–9 → Speed control (0 = stop, 9 = full speed)
 
 ## Features
 - Serial-based motor control
@@ -39,6 +40,10 @@ with direction and speed control via Arduino and L298N.
 The Arduino reads single-character commands from the serial monitor.
 Based on the command, motor direction pins are set and speed is controlled
 using PWM on the enable pins of the L298N driver.
+Speed can be adjusted in real time using numeric serial commands.
+The speed value is mapped from 0–9 to a PWM range of 0–255,
+allowing smooth motor control without stopping the robot.
+
 
 ## How to Run
 1. Connect the L298N module to Arduino as per wiring diagram
