@@ -5,6 +5,7 @@
    L - Left
    R - Right
    S - Stop
+   0–9 - Speed control (0 = stop, 9 = full speed)
 --------------------------------------------- */
 
 #define ENA 5
@@ -14,7 +15,7 @@
 #define IN4 11
 #define ENB 6
 
-int speedVal = 180;  // 0–255
+int speedVal = 180;  // Default speed (0–255)
 
 void setup() {
   Serial.begin(9600);
@@ -27,7 +28,7 @@ void setup() {
   pinMode(IN4, OUTPUT);
 
   stopMotors();
-  Serial.println("READY: Send F B L R S");
+  Serial.println("READY: F B L R S | Speed 0-9");
 }
 
 void loop() {
@@ -35,12 +36,38 @@ void loop() {
     char cmd = Serial.read();
 
     switch (cmd) {
-      case 'F': forward(); break;
-      case 'B': backward(); break;
-      case 'L': left(); break;
-      case 'R': right(); break;
-      case 'S': stopMotors(); break;
-      default: Serial.println("INVALID"); break;
+
+      case 'F':
+        forward();
+        break;
+
+      case 'B':
+        backward();
+        break;
+
+      case 'L':
+        left();
+        break;
+
+      case 'R':
+        right();
+        break;
+
+      case 'S':
+        stopMotors();
+        break;
+
+      case '0'...'9':
+        speedVal = map(cmd - '0', 0, 9, 0, 255);
+        analogWrite(ENA, speedVal);
+        analogWrite(ENB, speedVal);
+        Serial.print("SPEED SET TO: ");
+        Serial.println(speedVal);
+        break;
+
+      default:
+        Serial.println("INVALID COMMAND");
+        break;
     }
   }
 }
@@ -69,28 +96,4 @@ void backward() {
 
 void left() {
   analogWrite(ENA, speedVal);
-  analogWrite(ENB, speedVal);
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, HIGH);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
-  Serial.println("LEFT");
-}
-
-void right() {
-  analogWrite(ENA, speedVal);
-  analogWrite(ENB, speedVal);
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, HIGH);
-  Serial.println("RIGHT");
-}
-
-void stopMotors() {
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
-  Serial.println("STOP");
-}
+  analogWrite(
