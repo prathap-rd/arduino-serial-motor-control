@@ -10,6 +10,18 @@ with direction and speed control via Arduino and L298N.
 - DC Motors
 - External Power Supply
 
+## Pin Configuration
+
+| L298N Pin | Arduino Pin | Purpose |
+|----------|-------------|---------|
+| ENA      | 5           | Motor A speed (PWM) |
+| IN1      | 8           | Motor A direction |
+| IN2      | 9           | Motor A direction |
+| IN3      | 10          | Motor B direction |
+| IN4      | 11          | Motor B direction |
+| ENB      | 6           | Motor B speed (PWM) |
+
+
 ## Control Commands
 - F → Forward
 - B → Backward
